@@ -1,0 +1,2161 @@
+{
+  "datasets": [
+    {
+      "name": "covid_kpi_analysis",
+      "displayName": "COVID KPI Analysis",
+      "config": {
+        "version": "1.1",
+        "source": "dbacademy.default.sec_edgar_analysis_3",
+        "dimensions": [
+          {
+            "name": "period",
+            "expr": "period",
+            "displayName": "Period"
+          }
+        ],
+        "measures": [
+          {
+            "name": "current_ratio",
+            "expr": "AVG(avg_current_ratio)",
+            "displayName": "Current Ratio"
+          },
+          {
+            "name": "debt_ratio",
+            "expr": "AVG(avg_debt_ratio)",
+            "displayName": "Debt Ratio"
+          },
+          {
+            "name": "roa",
+            "expr": "AVG(avg_roa)",
+            "displayName": "ROA"
+          },
+          {
+            "name": "roe",
+            "expr": "AVG(avg_roe)",
+            "displayName": "ROE"
+          },
+          {
+            "name": "operating_margin",
+            "expr": "AVG(avg_operating_margin)",
+            "displayName": "Operating Margin"
+          },
+          {
+            "name": "gross_margin",
+            "expr": "AVG(avg_gross_margin)",
+            "displayName": "Gross Margin"
+          }
+        ]
+      }
+    },
+    {
+      "name": "kpi_recovery_status",
+      "displayName": "KPI Recovery Status",
+      "queryLines": [
+        "WITH pivoted AS (\n",
+        "  SELECT\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Pre-COVID' THEN avg_current_ratio\n",
+        "      END\n",
+        "    ) AS pre_current_ratio,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'COVID-Impact' THEN avg_current_ratio\n",
+        "      END\n",
+        "    ) AS covid_current_ratio,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Post-COVID-Recovery' THEN avg_current_ratio\n",
+        "      END\n",
+        "    ) AS post_current_ratio,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Pre-COVID' THEN avg_debt_ratio\n",
+        "      END\n",
+        "    ) AS pre_debt_ratio,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'COVID-Impact' THEN avg_debt_ratio\n",
+        "      END\n",
+        "    ) AS covid_debt_ratio,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Post-COVID-Recovery' THEN avg_debt_ratio\n",
+        "      END\n",
+        "    ) AS post_debt_ratio,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Pre-COVID' THEN avg_roa\n",
+        "      END\n",
+        "    ) AS pre_roa,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'COVID-Impact' THEN avg_roa\n",
+        "      END\n",
+        "    ) AS covid_roa,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Post-COVID-Recovery' THEN avg_roa\n",
+        "      END\n",
+        "    ) AS post_roa,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Pre-COVID' THEN avg_roe\n",
+        "      END\n",
+        "    ) AS pre_roe,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'COVID-Impact' THEN avg_roe\n",
+        "      END\n",
+        "    ) AS covid_roe,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Post-COVID-Recovery' THEN avg_roe\n",
+        "      END\n",
+        "    ) AS post_roe,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Pre-COVID' THEN avg_operating_margin\n",
+        "      END\n",
+        "    ) AS pre_op_margin,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'COVID-Impact' THEN avg_operating_margin\n",
+        "      END\n",
+        "    ) AS covid_op_margin,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Post-COVID-Recovery' THEN avg_operating_margin\n",
+        "      END\n",
+        "    ) AS post_op_margin,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Pre-COVID' THEN avg_gross_margin\n",
+        "      END\n",
+        "    ) AS pre_gross_margin,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'COVID-Impact' THEN avg_gross_margin\n",
+        "      END\n",
+        "    ) AS covid_gross_margin,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Post-COVID-Recovery' THEN avg_gross_margin\n",
+        "      END\n",
+        "    ) AS post_gross_margin,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Pre-COVID' THEN avg_asset_turnover\n",
+        "      END\n",
+        "    ) AS pre_asset_turnover,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'COVID-Impact' THEN avg_asset_turnover\n",
+        "      END\n",
+        "    ) AS covid_asset_turnover,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Post-COVID-Recovery' THEN avg_asset_turnover\n",
+        "      END\n",
+        "    ) AS post_asset_turnover,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Pre-COVID' THEN avg_debt_to_equity\n",
+        "      END\n",
+        "    ) AS pre_debt_equity,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'COVID-Impact' THEN avg_debt_to_equity\n",
+        "      END\n",
+        "    ) AS covid_debt_equity,\n",
+        "    MAX(\n",
+        "      CASE\n",
+        "        WHEN period = 'Post-COVID-Recovery' THEN avg_debt_to_equity\n",
+        "      END\n",
+        "    ) AS post_debt_equity\n",
+        "  FROM\n",
+        "    dbacademy.default.sec_edgar_analysis_3\n",
+        ")\n",
+        "SELECT\n",
+        "  'Current ratio' AS kpi,\n",
+        "  pre_current_ratio AS pre_covid,\n",
+        "  covid_current_ratio AS covid_impact,\n",
+        "  post_current_ratio AS post_covid,\n",
+        "  CASE\n",
+        "    WHEN post_current_ratio > pre_current_ratio * 1.1 THEN 'Recovered'\n",
+        "    ELSE 'Recovering'\n",
+        "  END AS status\n",
+        "FROM\n",
+        "  pivoted\n",
+        "UNION ALL\n",
+        "SELECT\n",
+        "  'Debt ratio',\n",
+        "  pre_debt_ratio,\n",
+        "  covid_debt_ratio,\n",
+        "  post_debt_ratio,\n",
+        "  CASE\n",
+        "    WHEN post_debt_ratio < pre_debt_ratio * 0.9 THEN 'Recovered'\n",
+        "    ELSE 'Recovering'\n",
+        "  END\n",
+        "FROM\n",
+        "  pivoted\n",
+        "UNION ALL\n",
+        "SELECT\n",
+        "  'ROA',\n",
+        "  pre_roa,\n",
+        "  covid_roa,\n",
+        "  post_roa,\n",
+        "  CASE\n",
+        "    WHEN post_roa > pre_roa THEN 'Recovering'\n",
+        "    ELSE 'Not fully recovered'\n",
+        "  END\n",
+        "FROM\n",
+        "  pivoted\n",
+        "UNION ALL\n",
+        "SELECT\n",
+        "  'ROE',\n",
+        "  pre_roe,\n",
+        "  covid_roe,\n",
+        "  post_roe,\n",
+        "  CASE\n",
+        "    WHEN post_roe < pre_roe THEN 'Below baseline'\n",
+        "    ELSE 'Recovered'\n",
+        "  END\n",
+        "FROM\n",
+        "  pivoted\n",
+        "UNION ALL\n",
+        "SELECT\n",
+        "  'Operating margin',\n",
+        "  pre_op_margin,\n",
+        "  covid_op_margin,\n",
+        "  post_op_margin,\n",
+        "  CASE\n",
+        "    WHEN post_op_margin < pre_op_margin THEN 'Not recovered'\n",
+        "    ELSE 'Recovered'\n",
+        "  END\n",
+        "FROM\n",
+        "  pivoted\n",
+        "UNION ALL\n",
+        "SELECT\n",
+        "  'Gross margin',\n",
+        "  pre_gross_margin,\n",
+        "  covid_gross_margin,\n",
+        "  post_gross_margin,\n",
+        "  CASE\n",
+        "    WHEN post_gross_margin < pre_gross_margin THEN 'Slight decline'\n",
+        "    ELSE 'Recovered'\n",
+        "  END\n",
+        "FROM\n",
+        "  pivoted\n",
+        "UNION ALL\n",
+        "SELECT\n",
+        "  'Asset turnover',\n",
+        "  pre_asset_turnover,\n",
+        "  covid_asset_turnover,\n",
+        "  post_asset_turnover,\n",
+        "  CASE\n",
+        "    WHEN post_asset_turnover < pre_asset_turnover THEN 'Declining'\n",
+        "    ELSE 'Recovered'\n",
+        "  END\n",
+        "FROM\n",
+        "  pivoted\n",
+        "UNION ALL\n",
+        "SELECT\n",
+        "  'Debt to equity',\n",
+        "  pre_debt_equity,\n",
+        "  covid_debt_equity,\n",
+        "  post_debt_equity,\n",
+        "  CASE\n",
+        "    WHEN post_debt_equity > pre_debt_equity * 1.05 THEN 'Partial recovery'\n",
+        "    ELSE 'Recovered'\n",
+        "  END\n",
+        "FROM\n",
+        "  pivoted"
+      ],
+      "catalog": "dbacademy",
+      "schema": "default"
+    },
+    {
+      "name": "fastest_recovering_sectors",
+      "displayName": "Fastest Recovering Sectors Post-COVID",
+      "queryLines": [
+        "SELECT\n",
+        "  CASE sic\n",
+        "    WHEN 5900 THEN 'Retail stores'\n",
+        "    WHEN 8082 THEN 'Home health'\n",
+        "    WHEN 3826 THEN 'Lab instruments'\n",
+        "    WHEN 4700 THEN 'Transportation'\n",
+        "    WHEN 3842 THEN 'Ortho equip'\n",
+        "    WHEN 7380 THEN 'Business svcs'\n",
+        "    WHEN 1000 THEN 'Metal mining'\n",
+        "    WHEN 4011 THEN 'Railroads'\n",
+        "    WHEN 2835 THEN 'Diagnostics'\n",
+        "    WHEN 6798 THEN 'REITs'\n",
+        "    ELSE CAST(sic AS STRING)\n",
+        "  END AS sector_name,\n",
+        "  CONCAT(\n",
+        "    CAST(sic AS STRING),\n",
+        "    ' ',\n",
+        "    CASE sic\n",
+        "      WHEN 5900 THEN 'Retail stores'\n",
+        "      WHEN 8082 THEN 'Home health'\n",
+        "      WHEN 3826 THEN 'Lab instruments'\n",
+        "      WHEN 4700 THEN 'Transportation'\n",
+        "      WHEN 3842 THEN 'Ortho equip'\n",
+        "      WHEN 7380 THEN 'Business svcs'\n",
+        "      WHEN 1000 THEN 'Metal mining'\n",
+        "      WHEN 4011 THEN 'Railroads'\n",
+        "      WHEN 2835 THEN 'Diagnostics'\n",
+        "      WHEN 6798 THEN 'REITs'\n",
+        "      ELSE CAST(sic AS STRING)\n",
+        "    END\n",
+        "  ) AS sector_label,\n",
+        "  roa_delta\n",
+        "FROM\n",
+        "  dbacademy.default.sec_edgar_analysis_4\n",
+        "ORDER BY\n",
+        "  roa_delta DESC\n",
+        "LIMIT 10"
+      ],
+      "catalog": "dbacademy",
+      "schema": "default"
+    },
+    {
+      "name": "most_impacted_sectors",
+      "displayName": "Most Impacted Sectors During COVID",
+      "queryLines": [
+        "SELECT\n",
+        "  CASE sic\n",
+        "    WHEN 5810 THEN 'Eating/drinking'\n",
+        "    WHEN 8741 THEN 'Consulting'\n",
+        "    WHEN 2030 THEN 'Food processing'\n",
+        "    WHEN 6794 THEN 'Patents'\n",
+        "    WHEN 3829 THEN 'Instruments'\n",
+        "    WHEN 4899 THEN 'Communications'\n",
+        "    WHEN 3670 THEN 'Electronics'\n",
+        "    WHEN 6531 THEN 'Real estate'\n",
+        "    WHEN 1700 THEN 'Construction'\n",
+        "    WHEN 3663 THEN 'Radio/TV equip'\n",
+        "    ELSE CAST(sic AS STRING)\n",
+        "  END AS sector_name,\n",
+        "  CONCAT(\n",
+        "    CAST(sic AS STRING),\n",
+        "    ' ',\n",
+        "    CASE sic\n",
+        "      WHEN 5810 THEN 'Eating/drinking'\n",
+        "      WHEN 8741 THEN 'Consulting'\n",
+        "      WHEN 2030 THEN 'Food processing'\n",
+        "      WHEN 6794 THEN 'Patents'\n",
+        "      WHEN 3829 THEN 'Instruments'\n",
+        "      WHEN 4899 THEN 'Communications'\n",
+        "      WHEN 3670 THEN 'Electronics'\n",
+        "      WHEN 6531 THEN 'Real estate'\n",
+        "      WHEN 1700 THEN 'Construction'\n",
+        "      WHEN 3663 THEN 'Radio/TV equip'\n",
+        "      ELSE CAST(sic AS STRING)\n",
+        "    END\n",
+        "  ) AS sector_label,\n",
+        "  roa_delta,\n",
+        "  companies\n",
+        "FROM\n",
+        "  dbacademy.default.sec_edgar_analysis_2\n",
+        "ORDER BY\n",
+        "  roa_delta ASC\n",
+        "LIMIT 10"
+      ],
+      "catalog": "dbacademy",
+      "schema": "default"
+    },
+    {
+      "name": "quarterly_leverage_trend",
+      "displayName": "Quarterly Leverage Trend",
+      "config": {
+        "version": "1.1",
+        "source": "dbacademy.default.sec_edgar_analysis_6",
+        "dimensions": [
+          {
+            "name": "source_year",
+            "expr": "source_year",
+            "displayName": "Year"
+          },
+          {
+            "name": "source_quarter",
+            "expr": "source_quarter",
+            "displayName": "Quarter"
+          },
+          {
+            "name": "period",
+            "expr": "period",
+            "displayName": "Period"
+          },
+          {
+            "name": "quarter_label",
+            "expr": "CONCAT(CAST(source_year AS STRING), 'Q', CAST(source_quarter AS STRING))",
+            "displayName": "Quarter Label"
+          }
+        ],
+        "measures": [
+          {
+            "name": "debt_ratio",
+            "expr": "AVG(avg_debt_ratio)",
+            "displayName": "Debt Ratio"
+          },
+          {
+            "name": "debt_to_equity",
+            "expr": "AVG(avg_debt_to_equity)",
+            "displayName": "Debt to Equity"
+          },
+          {
+            "name": "current_ratio",
+            "expr": "AVG(avg_current_ratio)",
+            "displayName": "Current Ratio"
+          },
+          {
+            "name": "current_ratio_scaled",
+            "expr": "MEASURE(current_ratio) / 10",
+            "displayName": "Current Ratio (÷10 scaled)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "company_classification",
+      "displayName": "Company Classification",
+      "config": {
+        "version": "1.1",
+        "source": "dbacademy.default.sec_edgar_analysis_7",
+        "dimensions": [
+          {
+            "name": "trend",
+            "expr": "trend",
+            "displayName": "Classification"
+          }
+        ],
+        "measures": [
+          {
+            "name": "companies",
+            "expr": "SUM(companies)",
+            "displayName": "Companies"
+          },
+          {
+            "name": "avg_roa_change",
+            "expr": "AVG(avg_roa_change)",
+            "displayName": "Avg ROA Change"
+          },
+          {
+            "name": "avg_op_margin_change",
+            "expr": "AVG(avg_op_margin_change)",
+            "displayName": "Avg Op Margin Change"
+          }
+        ]
+      }
+    }
+  ],
+  "pages": [
+    {
+      "name": "82b504a0",
+      "displayName": "KPI Overview",
+      "layout": [
+        {
+          "widget": {
+            "name": "current_ratio_counter",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "covid_kpi_analysis",
+                  "fields": [
+                    {
+                      "name": "measure(current_ratio)",
+                      "expression": "MEASURE(`current_ratio`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`period` = 'Post-COVID-Recovery'"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "CURRENT RATIO \nPOST-COVID",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(current_ratio)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  },
+                  "displayName": "Current Ratio"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "debt_ratio_counter",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "covid_kpi_analysis",
+                  "fields": [
+                    {
+                      "name": "measure(debt_ratio)",
+                      "expression": "MEASURE(`debt_ratio`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`period` = 'Post-COVID-Recovery'"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "DEBT RATIO POST-COVID",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(debt_ratio)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  },
+                  "displayName": "Debt Ratio"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "roa_counter",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "covid_kpi_analysis",
+                  "fields": [
+                    {
+                      "name": "measure(roa)",
+                      "expression": "MEASURE(`roa`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`period` = 'Post-COVID-Recovery'"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "ROA POST-COVID",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(roa)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 3
+                    }
+                  },
+                  "displayName": "ROA"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "operating_margin_counter",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "covid_kpi_analysis",
+                  "fields": [
+                    {
+                      "name": "measure(operating_margin)",
+                      "expression": "MEASURE(`operating_margin`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`period` = 'Post-COVID-Recovery'"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "OPERATING MARGIN \nPOST-COVID",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(operating_margin)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 3
+                    }
+                  },
+                  "displayName": "Operating Margin"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "roa_by_period_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "covid_kpi_analysis",
+                  "fields": [
+                    {
+                      "name": "period",
+                      "expression": "`period`"
+                    },
+                    {
+                      "name": "measure(roa)",
+                      "expression": "MEASURE(`roa`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "ROA by Period",
+                "showTitle": true
+              },
+              "mark": {
+                "colors": [
+                  "#3b82f6"
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "period",
+                  "displayName": "Period",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(roa)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 3
+                    }
+                  },
+                  "displayName": "ROA",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi_comparison_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "covid_kpi_analysis",
+                  "fields": [
+                    {
+                      "name": "period",
+                      "expression": "`period`"
+                    },
+                    {
+                      "name": "measure(current_ratio)",
+                      "expression": "MEASURE(`current_ratio`)"
+                    },
+                    {
+                      "name": "measure(debt_ratio)",
+                      "expression": "MEASURE(`debt_ratio`)"
+                    },
+                    {
+                      "name": "measure(roa)",
+                      "expression": "MEASURE(`roa`)"
+                    },
+                    {
+                      "name": "measure(operating_margin)",
+                      "expression": "MEASURE(`operating_margin`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "title": "KPI Comparison Across Periods",
+                "showTitle": true
+              },
+              "version": 3,
+              "mark": {
+                "layout": "group"
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "period",
+                  "displayName": "Period",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "measure(current_ratio)",
+                      "displayName": "Current Ratio"
+                    },
+                    {
+                      "fieldName": "measure(debt_ratio)",
+                      "displayName": "Debt Ratio"
+                    },
+                    {
+                      "fieldName": "measure(roa)",
+                      "displayName": "ROA"
+                    },
+                    {
+                      "fieldName": "measure(operating_margin)",
+                      "displayName": "Operating Margin"
+                    }
+                  ],
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 3,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "recovery_status_table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "kpi_recovery_status",
+                  "fields": [
+                    {
+                      "name": "kpi",
+                      "expression": "`kpi`"
+                    },
+                    {
+                      "name": "pre_covid",
+                      "expression": "`pre_covid`"
+                    },
+                    {
+                      "name": "covid_impact",
+                      "expression": "`covid_impact`"
+                    },
+                    {
+                      "name": "post_covid",
+                      "expression": "`post_covid`"
+                    },
+                    {
+                      "name": "status",
+                      "expression": "`status`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Recovery Status"
+              },
+              "version": 2,
+              "rowsPerPage": 25,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "kpi",
+                    "columnWidth": 180,
+                    "displayName": "KPI"
+                  },
+                  {
+                    "fieldName": "pre_covid",
+                    "format": {
+                      "type": "number-plain",
+                      "abbreviation": "none",
+                      "decimalPlaces": {
+                        "type": "exact",
+                        "places": 4
+                      }
+                    },
+                    "columnWidth": 120,
+                    "displayName": "PRE-COVID"
+                  },
+                  {
+                    "fieldName": "covid_impact",
+                    "format": {
+                      "type": "number-plain",
+                      "abbreviation": "none",
+                      "decimalPlaces": {
+                        "type": "exact",
+                        "places": 4
+                      }
+                    },
+                    "columnWidth": 140,
+                    "displayName": "COVID-IMPACT"
+                  },
+                  {
+                    "fieldName": "post_covid",
+                    "format": {
+                      "type": "number-plain",
+                      "abbreviation": "none",
+                      "decimalPlaces": {
+                        "type": "exact",
+                        "places": 4
+                      }
+                    },
+                    "columnWidth": 120,
+                    "displayName": "POST-COVID"
+                  },
+                  {
+                    "fieldName": "status",
+                    "columnWidth": 180,
+                    "displayName": "STATUS",
+                    "style": {
+                      "type": "basic",
+                      "rules": [
+                        {
+                          "condition": {
+                            "operand": {
+                              "type": "data-value",
+                              "value": "Recovered"
+                            },
+                            "operator": "="
+                          },
+                          "foregroundColor": "#22c55e",
+                          "bold": true
+                        },
+                        {
+                          "condition": {
+                            "operand": {
+                              "type": "data-value",
+                              "value": "Recovering"
+                            },
+                            "operator": "="
+                          },
+                          "foregroundColor": "#f59e0b",
+                          "bold": true
+                        },
+                        {
+                          "condition": {
+                            "operand": {
+                              "type": "data-value",
+                              "value": "Partial recovery"
+                            },
+                            "operator": "="
+                          },
+                          "foregroundColor": "#f59e0b",
+                          "bold": true
+                        },
+                        {
+                          "condition": {
+                            "operand": {
+                              "type": "data-value",
+                              "value": "Below baseline"
+                            },
+                            "operator": "="
+                          },
+                          "foregroundColor": "#ef4444",
+                          "bold": true
+                        },
+                        {
+                          "condition": {
+                            "operand": {
+                              "type": "data-value",
+                              "value": "Not recovered"
+                            },
+                            "operator": "="
+                          },
+                          "foregroundColor": "#ef4444",
+                          "bold": true
+                        },
+                        {
+                          "condition": {
+                            "operand": {
+                              "type": "data-value",
+                              "value": "Slight decline"
+                            },
+                            "operator": "="
+                          },
+                          "foregroundColor": "#ef4444",
+                          "bold": true
+                        },
+                        {
+                          "condition": {
+                            "operand": {
+                              "type": "data-value",
+                              "value": "Declining"
+                            },
+                            "operator": "="
+                          },
+                          "foregroundColor": "#ef4444",
+                          "bold": true
+                        },
+                        {
+                          "condition": {
+                            "operand": {
+                              "type": "data-value",
+                              "value": "Not fully recovered"
+                            },
+                            "operator": "="
+                          },
+                          "foregroundColor": "#ef4444",
+                          "bold": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 12,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "current_ratio_comparison",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"color:#10b981\">▲ **+20.4%** vs Pre-COVID</span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "debt_ratio_comparison",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"color:#10b981\">▼ **-16.1%** vs Pre-COVID</span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 2,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "roa_comparison",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"color:#10b981\">▲ **Improving slowly**</span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "operating_margin_comparison",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"color:#ef4444\">▼ **Not recovered**</span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 2,
+            "width": 3,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "sector_analysis",
+      "displayName": "Sector Analysis",
+      "layout": [
+        {
+          "widget": {
+            "name": "most_impacted_chart",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "most_impacted_sectors",
+                  "fields": [
+                    {
+                      "name": "roa_delta",
+                      "expression": "`roa_delta`"
+                    },
+                    {
+                      "name": "sector_label",
+                      "expression": "`sector_label`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "title": "Most Impacted Sectors",
+                "showTitle": true
+              },
+              "version": 3,
+              "mark": {
+                "colors": [
+                  "#ef4444"
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "roa_delta",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "sector_label",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 6,
+            "height": 10
+          }
+        },
+        {
+          "widget": {
+            "name": "fastest_recovering_chart",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "fastest_recovering_sectors",
+                  "fields": [
+                    {
+                      "name": "roa_delta",
+                      "expression": "`roa_delta`"
+                    },
+                    {
+                      "name": "sector_label",
+                      "expression": "`sector_label`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "title": "Fastest Recovering Sectors",
+                "showTitle": true
+              },
+              "version": 3,
+              "mark": {
+                "colors": [
+                  "#10b981"
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "roa_delta",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  },
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "sector_label",
+                  "axis": {
+                    "hideTitle": true
+                  },
+                  "displayName": "",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 6,
+            "height": 10
+          }
+        },
+        {
+          "widget": {
+            "name": "impacted_insight",
+            "multilineTextboxSpec": {
+              "lines": [
+                "> SIC 5810 (Eating & Drinking) worst hit at -0.54 ROA delta. Food processing and consulting also severely impacted."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 6,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "recovering_insight",
+            "multilineTextboxSpec": {
+              "lines": [
+                "> SIC 5900 (Retail) showed strongest recovery at +0.52. Healthcare-adjacent and transportation sectors also recovered strongly."
+              ]
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 10,
+            "width": 6,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "leverage_trend",
+      "displayName": "Leverage Trend",
+      "layout": [
+        {
+          "widget": {
+            "name": "peak_debt_ratio",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "quarterly_leverage_trend",
+                  "fields": [
+                    {
+                      "name": "measure(debt_ratio)",
+                      "expression": "MEASURE(`debt_ratio`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`source_year` = 2018 AND `source_quarter` = 2"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "PEAK DEBT RATIO",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(debt_ratio)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  },
+                  "displayName": "0.87"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "lowest_debt_ratio",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "quarterly_leverage_trend",
+                  "fields": [
+                    {
+                      "name": "measure(debt_ratio)",
+                      "expression": "MEASURE(`debt_ratio`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`source_year` = 2022 AND `source_quarter` = 1"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "LOWEST DEBT RATIO",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(debt_ratio)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  },
+                  "displayName": "0.59"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "de_spike_covid",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "quarterly_leverage_trend",
+                  "fields": [
+                    {
+                      "name": "measure(debt_to_equity)",
+                      "expression": "MEASURE(`debt_to_equity`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`source_year` = 2020 AND `source_quarter` = 1"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "D/E SPIKE (COVID)",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(debt_to_equity)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  },
+                  "displayName": "0.70"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "de_2024_latest",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "quarterly_leverage_trend",
+                  "fields": [
+                    {
+                      "name": "measure(debt_to_equity)",
+                      "expression": "MEASURE(`debt_to_equity`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`source_year` = 2024 AND `source_quarter` = 4"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "title": "2024 D/E (LATEST)",
+                "showTitle": true
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(debt_to_equity)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  },
+                  "displayName": "0.76"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 0,
+            "width": 3,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "peak_debt_subtitle",
+            "multilineTextboxSpec": {
+              "lines": [
+                "2018 Q2 & 2019 Q2"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "lowest_debt_subtitle",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"color:#10b981\">2022 Q1 — Peak Health</span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 2,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "de_spike_subtitle",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"color:#ef4444\">Q1 2020 — Borrowing Surge</span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "de_2024_subtitle",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"color:#ef4444\">Rising — New Cycle</span>"
+              ]
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 2,
+            "width": 3,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "debt_current_ratio_line",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "quarterly_leverage_trend",
+                  "fields": [
+                    {
+                      "name": "quarter_label",
+                      "expression": "`quarter_label`"
+                    },
+                    {
+                      "name": "measure(debt_ratio)",
+                      "expression": "MEASURE(`debt_ratio`)"
+                    },
+                    {
+                      "name": "measure(current_ratio_scaled)",
+                      "expression": "MEASURE(`current_ratio_scaled`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "DEBT RATIO & CURRENT RATIO — 28 QUARTER TREND (2018–2024)",
+                "showTitle": true
+              },
+              "mark": {
+                "colors": [
+                  "#3b82f6",
+                  "#10b981"
+                ],
+                "linePatterns": [
+                  "solid",
+                  "dashed"
+                ]
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "quarter_label",
+                  "displayName": "",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "measure(debt_ratio)",
+                      "displayName": "Debt ratio"
+                    },
+                    {
+                      "fieldName": "measure(current_ratio_scaled)",
+                      "displayName": "Current ratio (÷10 scaled)"
+                    }
+                  ],
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 3,
+            "width": 12,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "leverage_trend_insight",
+            "multilineTextboxSpec": {
+              "lines": [
+                "> Debt ratio declined from 0.87 to 0.59 by 2022. Current ratio surged Post-COVID peaking at 4.14 in Q1 2022. Both normalizing in 2024 — signaling a new leverage cycle beginning."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 12,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "debt_to_equity_line",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "quarterly_leverage_trend",
+                  "fields": [
+                    {
+                      "name": "quarter_label",
+                      "expression": "`quarter_label`"
+                    },
+                    {
+                      "name": "measure(debt_to_equity)",
+                      "expression": "MEASURE(`debt_to_equity`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "title": "DEBT-TO-EQUITY QUARTERLY TREND",
+                "showTitle": true
+              },
+              "version": 3,
+              "mark": {
+                "colors": [
+                  "#f59e0b"
+                ]
+              },
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "quarter_label",
+                  "displayName": "",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "measure(debt_to_equity)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  },
+                  "displayName": "Debt to Equity",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 12,
+            "width": 12,
+            "height": 8
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "company_classification",
+      "displayName": "Company Classification",
+      "layout": [
+        {
+          "widget": {
+            "name": "company_classification_donut",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "company_classification",
+                  "fields": [
+                    {
+                      "name": "measure(companies)",
+                      "expression": "MEASURE(`companies`)"
+                    },
+                    {
+                      "name": "trend",
+                      "expression": "`trend`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "title": "Company Classification",
+                "showTitle": true
+              },
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "measure(companies)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    }
+                  },
+                  "displayName": "Company Count"
+                },
+                "color": {
+                  "fieldName": "trend",
+                  "displayName": "Classification",
+                  "scale": {
+                    "type": "categorical",
+                    "mappings": [
+                      {
+                        "value": "Improving",
+                        "color": "#10b981"
+                      },
+                      {
+                        "value": "Stable",
+                        "color": "#f59e0b"
+                      },
+                      {
+                        "value": "Deteriorating",
+                        "color": "#ef4444"
+                      }
+                    ]
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 5,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "company_classification_grouped_bar",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "company_classification",
+                  "fields": [
+                    {
+                      "name": "trend",
+                      "expression": "`trend`"
+                    },
+                    {
+                      "name": "measure(avg_roa_change)",
+                      "expression": "MEASURE(`avg_roa_change`)"
+                    },
+                    {
+                      "name": "measure(avg_op_margin_change)",
+                      "expression": "MEASURE(`avg_op_margin_change`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "frame": {
+                "title": "ROA & Op Margin Change by Class",
+                "showTitle": true
+              },
+              "mark": {
+                "colors": [
+                  "#22c55e",
+                  "#f59e0b",
+                  "#ef4444"
+                ],
+                "layout": "group"
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "trend",
+                  "displayName": "Classification",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fields": [
+                    {
+                      "fieldName": "measure(avg_roa_change)",
+                      "displayName": "Avg ROA Change"
+                    },
+                    {
+                      "fieldName": "measure(avg_op_margin_change)",
+                      "displayName": "Avg Op Margin Change"
+                    }
+                  ],
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 2
+                    }
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 5,
+            "y": 0,
+            "width": 7,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "improving_counter",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "company_classification",
+                  "fields": [
+                    {
+                      "name": "measure(companies)",
+                      "expression": "MEASURE(`companies`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`trend` = 'Improving'"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "title": "Improving Companies",
+                "showTitle": true
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "light": "#10b981",
+                  "dark": "#10b981"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(companies)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    }
+                  },
+                  "displayName": "Companies"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "stable_counter",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "company_classification",
+                  "fields": [
+                    {
+                      "name": "measure(companies)",
+                      "expression": "MEASURE(`companies`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`trend` = 'Stable'"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "title": "Stable Companies",
+                "showTitle": true
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "light": "#eab308",
+                  "dark": "#eab308"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(companies)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    }
+                  },
+                  "displayName": "Companies"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 8,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "deteriorating_counter",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "company_classification",
+                  "fields": [
+                    {
+                      "name": "measure(companies)",
+                      "expression": "MEASURE(`companies`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`trend` = 'Deteriorating'"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "title": "Deteriorating Companies",
+                "showTitle": true
+              },
+              "version": 2,
+              "style": {
+                "fontColor": {
+                  "light": "#ef4444",
+                  "dark": "#ef4444"
+                }
+              },
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "measure(companies)",
+                  "format": {
+                    "type": "number-plain",
+                    "abbreviation": "none",
+                    "decimalPlaces": {
+                      "type": "exact",
+                      "places": 0
+                    }
+                  },
+                  "displayName": "Companies"
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 8,
+            "width": 4,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "classification_insight",
+            "multilineTextboxSpec": {
+              "lines": [
+                "> Most companies are Improving or Stable, with Deteriorating firms showing negative ROA and margin change. Group averages: Improving (+0.21 ROA, +0.15 Op Margin), Stable (0.00 ROA, +0.01 Op Margin), Deteriorating (-0.16 ROA, -0.09 Op Margin)."
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 12,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#0f172a",
+        "dark": "#0f172a"
+      },
+      "widgetBackgroundColor": {
+        "light": "#1e293b",
+        "dark": "#1e293b"
+      },
+      "widgetBorderColor": {
+        "light": "#334155",
+        "dark": "#334155"
+      },
+      "fontColor": {
+        "light": "#e2e8f0",
+        "dark": "#e2e8f0"
+      },
+      "selectionColor": {
+        "light": "#3b82f6",
+        "dark": "#3b82f6"
+      },
+      "visualizationColors": [
+        "#10b981",
+        "#3b82f6",
+        "#f59e0b",
+        "#ef4444",
+        "#8b5cf6",
+        "#ec4899",
+        "#14b8a6",
+        "#f97316"
+      ],
+      "widgetHeaderAlignment": "ALIGNMENT_UNSPECIFIED",
+      "gridLineColor": {
+        "light": "#334155",
+        "dark": "#334155"
+      },
+      "axisLineColor": {
+        "light": "#475569",
+        "dark": "#475569"
+      }
+    },
+    "applyModeEnabled": false
+  }
+}
