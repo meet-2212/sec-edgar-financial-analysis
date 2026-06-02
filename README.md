@@ -133,4 +133,4 @@ vary by industry sector?"**
 Project completed: June 1, 2026
  
 ## Author
-Meet Saini | Data Engineer & Analyst
+Meet Saini 
