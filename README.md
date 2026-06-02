@@ -1,5 +1,5 @@
 # SEC EDGAR Financial KPI Analysis
- 
+
 ## Overview
 This project analyzes the impact of COVID-19 on corporate financial health
 using SEC EDGAR DERA Financial Statement Data Sets. The analysis spans
@@ -11,7 +11,10 @@ publicly traded companies and industry sectors.
 **"Which financial KPIs derived from SEC EDGAR filings were most impacted
 by COVID-19, how did they recover Post-COVID, and do these patterns
 vary by industry sector?"**
- 
+
+## Dashboard Link
+https://dbc-ed455dba-c535.cloud.databricks.com/dashboardsv3/01f15ec886871c359a75aa047bdc5371/published?o=7474646254263004
+
 ## Target Audience
 - Asset Management Firms
 - Trading & Hedge Funds
